@@ -24,6 +24,8 @@ Additional supports:
 
     npm i -g coc-repl
 
+Or use `npx coc-repl` to install and run the command.
+
 ## Usage
 
 Run `coc-repl --help` to get help like:
@@ -92,23 +94,23 @@ variable `ext`, which defined as:
 
 ```typescript
 interface ExportedExtension {
-  readonly name: string;
+  readonly name: string
   /*
    * Is true when activated.
    */
-  readonly isActive: boolean;
+  readonly isActive: boolean
   /*
    * Unload this extension.
    */
-  unload: () => Promise<void>;
+  unload: () => Promise<void>
   /**
    * API returned by activate function
    */
-  readonly api: any;
+  readonly api: any
   /**
    * The object of module.exports from the extension entry without activate & deactivate function.
    */
-  readonly exports: any;
+  readonly exports: any
 }
 ```
 
