@@ -1,0 +1,60 @@
+#! /usr/bin/env node
+require('source-map-support').install()
+const yargs = require('yargs/yargs')
+const {hideBin} = require('yargs/helpers')
+const {start} = require('../src/index')
+
+let args = yargs(hideBin(process.argv))
+  .usage('$0 [options]', 'Start REPL server with coc.nvim exports as global context')
+  .option('port', {
+    alias: 'p',
+    type: 'number',
+    description: 'Tcp port of the socket server to listen on.'
+  })
+  .option('help', {
+    alias: 'h',
+    type: 'boolean',
+    description: 'Show help',
+  })
+  .option('pipe', {
+    type: 'boolean',
+    description: 'Use socket pipe for server instead of tcp port.'
+  })
+  .option('noplugin', {
+    type: 'boolean',
+    description: 'Not load any coc.nvim extensions, except extensions specified by --load option.'
+  })
+  .option('noconfig', {
+    type: 'boolean',
+    description: 'Not load user configuration file of coc.nvim'
+  })
+  .option('clean', {
+    alias: 'C',
+    type: 'boolean',
+    description: 'Not load coc.nvim extensions and user configuration file, same as --noplugin --noconfig'
+  })
+  .option('load', {
+    type: 'string',
+    alias: 'L',
+    array: true,
+    default: [],
+    description: 'Load and activate coc.nvim extension from specified filepath, filepath could be folder or file, use "." to load current directory.'
+  })
+  .option('trace', {
+    type: 'boolean',
+    description: 'Enable use current stdio to trace coc.nvim events and other log messages.'
+  })
+  .option('verbose', {
+    alias: 'v',
+    type: 'boolean',
+    description: 'Enable use current stdio to show verbose messages of the node client.'
+  })
+  .parse()
+
+if (args.clean) {
+  args.noplugin = true
+  args.noconfig = true
+}
+start(args).catch(e => {
+  console.error(e)
+})

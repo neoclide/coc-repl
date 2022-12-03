@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "moduleResolution": "node",
+    "target": "ES2020"
+  },
+  "include": ["src"]
+}
