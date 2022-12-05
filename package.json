@@ -1,6 +1,6 @@
 {
   "name": "coc-repl",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Read-Eval-Print-Loop (REPL) utility for coc.nvim.",
   "main": "src/index.js",
   "bin": "./bin/coc-repl",
