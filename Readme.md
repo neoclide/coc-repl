@@ -17,6 +17,7 @@ Additional supports:
 - Reconnect to the server by vim command `:CocRestart`.
 - Trace events of coc.nvim with current console.
 - Show debug messages of the node-client with current console, mostly the transport messages.
+- Trace verbose output from `LanguageClient` with current console.
 
 **Important**, latest coc.nvim is required.
 
@@ -69,6 +70,9 @@ the server.
   from coc.nvim.
 - `.load filepath` load coc.nvim extension from filepath, could be folder or
   file, could be absolute path or path relative to current cwd.
+- `.trace LanguageClientId` trace output of language client by id, the
+  language client should be registered, get the id by `:CocList services`,
+  support for language clients only, services like tsserver not supported.
 
 Check out the available REPL commands at https://nodejs.org/api/repl.html#commands-and-special-keys.
 

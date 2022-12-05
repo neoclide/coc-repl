@@ -81,6 +81,7 @@ async function start(args) {
   let replServer
   let currentLogger
   let load
+  let services
   function startRepl() {
     if (replServer) return
     const yellowOpen = '\x1B[33m'
@@ -140,6 +141,44 @@ async function start(args) {
         }
       }
     })
+    replServer.defineCommand('trace', {
+      help: 'Trace output of language client by id',
+      async action(id) {
+        if (!id) {
+          // let stats = services.getServiceStats()
+          // let ids = stats.map(o => o.id.startsWith('languageserver') ? o.id.slice('languageserver.'.length) : o.id)
+          // ids = ids.filter(id => services.getService(id).client != null)
+          // if (!ids.length) {
+          //   logError('No language client exists')
+          //   replServer.displayPrompt()
+          //   return
+          // }
+          // let res = await cliSelect({
+          //   values: ids,
+          //   valueRenderer: (value, selected) => {
+          //     if (selected) return '\x1B[34m' + value + '\x1B[39m'
+          //     return value
+          //   },
+          // }).catch(() => {
+          //   return undefined
+          // })
+          // if (!res) return
+          // id = res.value
+          // console.log(id)
+          logError('language client id required')
+          replServer.displayPrompt()
+          return
+        }
+        let service = services.getService(id)
+        if (!service || service.client == null) {
+          logError(`language client "${id}" not found`)
+          replServer.displayPrompt()
+          return
+        }
+        service.client.switchConsole()
+        replServer.displayPrompt()
+      }
+    })
     replServer.defineCommand('load', {
       help: 'Load and activate coc.nvim extension from absolute filepath or file relative to cwd',
       action(filepath) {
@@ -176,6 +215,7 @@ async function start(args) {
       delete Module._cache[require.resolve(entryFile)]
       const {attach, exports, logger, loadExtension} = require(entryFile)
       currentLogger = logger
+      services = exports.services
       if (args.trace) logger.switchConsole()
       let plugin = attach({reader: socket, writer: socket}, false)
       let nvim = plugin.nvim
