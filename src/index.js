@@ -145,26 +145,7 @@ async function start(args) {
       help: 'Trace output of language client by id',
       async action(id) {
         if (!id) {
-          // let stats = services.getServiceStats()
-          // let ids = stats.map(o => o.id.startsWith('languageserver') ? o.id.slice('languageserver.'.length) : o.id)
-          // ids = ids.filter(id => services.getService(id).client != null)
-          // if (!ids.length) {
-          //   logError('No language client exists')
-          //   replServer.displayPrompt()
-          //   return
-          // }
-          // let res = await cliSelect({
-          //   values: ids,
-          //   valueRenderer: (value, selected) => {
-          //     if (selected) return '\x1B[34m' + value + '\x1B[39m'
-          //     return value
-          //   },
-          // }).catch(() => {
-          //   return undefined
-          // })
-          // if (!res) return
-          // id = res.value
-          // console.log(id)
+          // TODO command line select
           logError('language client id required')
           replServer.displayPrompt()
           return
@@ -219,6 +200,10 @@ async function start(args) {
       if (args.trace) logger.switchConsole()
       let plugin = attach({reader: socket, writer: socket}, false)
       let nvim = plugin.nvim
+      nvim.on('vim_error', err => {
+        logError(`Error event from vim: ${err}`)
+        if (replServer) replServer.displayPrompt()
+      })
       socket.once('close', () => {
         nvim.detach()
       })
